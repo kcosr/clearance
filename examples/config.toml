@@ -1,0 +1,104 @@
+[scan]
+# Explicit opt-in outcome exclusion; tests are always scanned and assessed.
+excludeTestFixtures = false
+include = []
+exclude = [".git/**", "node_modules/**", "dist/**", ".cache/**"]
+maxFileBytes = 1048576
+maxDepth = 32
+skipExtensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico",
+                  ".woff", ".woff2", ".ttf", ".eot", ".mp3", ".mp4", ".wav"]
+archiveExtensions = [".zip", ".tar", ".tgz", ".gz", ".7z", ".rar", ".jar", ".war", ".whl"]
+onUnreadable = "incomplete"
+onOversize = "incomplete"
+onArchive = "incomplete"
+
+[detectors.native]
+enabled = true
+rulesD = "/etc/clearance/rules.d"
+
+[detectors.gitleaks]
+enabled = true
+history = false
+bin = "gitleaks"
+config = "/etc/clearance/gitleaks.toml"
+ignore = "/etc/clearance/gitleaks.ignore"
+
+[detectors.trufflehog]
+enabled = true
+history = false
+bin = "trufflehog"
+config = ""
+includeDetectors = []
+excludeDetectors = []
+
+# For optional whole-file classification, merge examples/classifier.toml settings.
+# Its executable/provider configuration is separate from the validator below.
+
+[model]
+api = "chat_completions"
+baseURL = "http://127.0.0.1:8000/v1"
+model = "local-model"
+# Name of the environment variable containing the provider API key. Leave
+# empty for an endpoint that does not require authentication.
+apiKeyEnv = ""
+timeoutMs = 30000
+maxRetries = 1
+contextWindow = 32000
+reasoning = "off"
+maxOutputTokens = 2048
+
+[llm]
+enabled = false
+mode = "validate"
+canOverride = false
+failurePolicy = "accept"
+maxRepairs = 1
+timeoutMs = 120000
+partialOnTimeout = true
+instructions = ""
+instructionsText = ""
+# Debug trace of each LLM batch attempt, JSONL, created 0600. Empty = disabled.
+# Relative paths are placed inside [report].outputDir, so changing --output
+# relocates the reports and trace together. Absolute paths remain absolute.
+# "full" also records the system prompt, available tools, complete message
+# history, request, parsed result, and raw provider responses. It can contain
+# secrets, so treat both JSONL and HTML trace files as credential material.
+traceFile = ""
+traceDetail = "metadata"        # metadata | full
+
+# Optional ranged read tool. Lets the model ask for more lines around a finding
+# it cannot judge from the supplied evidence. Reads are confined to files that
+# already carry a finding in the same batch.
+[llm.tools]
+read = false
+maxLines = 200                  # per call; a wider range is truncated to this
+maxCalls = 8                    # per batch; 0 disables the tool
+
+[llm.batch]
+maxTokens = 4096
+maxClusters = 50
+maxBytes = 16384
+contextLines = 2
+concurrency = 1
+
+[suppress]
+strings = []
+patterns = []
+ignoreCase = false
+
+[report]
+enabled = true                  # --report/--no-report overrides this
+outputDir = "./clearance-report"
+progress = "auto"               # auto | on | off; overridden by --progress/--quiet
+formats = ["json", "markdown", "html"]
+failOn = "high"
+includeRaw = false               # publish original values in reports and JSON stdout
+
+# Bounds applied to every external scanner invocation. Exceeding one fails that
+# detector with timeout / output-limit / finding-limit rather than hanging.
+[limits]
+scannerTimeoutMs = 120000
+versionTimeoutMs = 5000
+maxStdoutBytes = 8000000
+maxReportBytes = 16000000
+maxFindings = 10000

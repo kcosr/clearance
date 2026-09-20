@@ -1,0 +1,6 @@
+node_modules/
+dist/
+clearance-report/
+coverage/
+*.tsbuildinfo
+.DS_Store

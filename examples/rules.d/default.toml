@@ -1,0 +1,17 @@
+schema_version = "clearance-rules/1"
+
+[[rules]]
+id = "no-windows-exe"
+type = "glob"
+pattern = "*.exe"
+severity = "high"
+category = "executable"
+message = "Windows executable (.exe). Binaries are not reviewable as text and may carry embedded credentials."
+
+[[rules]]
+id = "private-key"
+type = "regex"
+pattern = "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+severity = "critical"
+category = "private-key"
+message = "PEM private key block. Private keys must never be shared or handed to a coding agent."

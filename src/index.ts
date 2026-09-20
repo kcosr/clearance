@@ -1,0 +1,12 @@
+export { parseArgs, runClearance, type RunOptions } from "./scan.js";
+export { loadConfig, defaultConfig, applyCli, applyEnv, ConfigSchema } from "./config.js";
+export { createScriptedRuntime, createConstantRuntime, type ValidatorRuntime } from "./llm/runtime.js";
+export { clusterOccurrences } from "./cluster.js";
+export { extractEvidence } from "./evidence.js";
+export { decideOutcome } from "./outcome.js";
+export { walkRoots, resolveRoots } from "./walk.js";
+export { parseGitleaksReport } from "./scanners/gitleaks.js";
+export { parseTrufflehogNdjson } from "./scanners/trufflehog.js";
+export { loadNativeRules } from "./native/rules.js";
+export { runNativeRules } from "./native/scan.js";
+export type * from "./types.js";

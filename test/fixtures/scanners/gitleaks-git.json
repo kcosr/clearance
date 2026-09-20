@@ -1,0 +1,14 @@
+[
+  {
+    "RuleID": "slack-bot-token",
+    "Description": "Slack Bot token",
+    "StartLine": 1,
+    "EndLine": 1,
+    "StartColumn": 17,
+    "EndColumn": 73,
+    "Secret": "REDACTED",
+    "File": "app.env",
+    "Commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "Tags": []
+  }
+]

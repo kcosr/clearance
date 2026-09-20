@@ -1,0 +1,6 @@
+title = "Clearance Gitleaks policy"
+
+# Administrator-owned. Never omit this file when Gitleaks is enabled, or
+# Gitleaks will load a scanned tree's .gitleaks.toml.
+[extend]
+useDefault = true

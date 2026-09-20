@@ -1,0 +1,39 @@
+# Merge these settings into /etc/clearance/config.toml, or pass --config.
+# This example runs only external discovery; enable other detectors as desired.
+[detectors.native]
+enabled = false
+[detectors.gitleaks]
+enabled = false
+history = false
+[detectors.trufflehog]
+enabled = false
+history = false
+
+[detectors.classifier]
+enabled = true
+# Edit both paths for your installation. The script is a runnable, model-free example.
+# Use an absolute Node.js executable path (find it with `command -v node`).
+executable = "/usr/bin/node"
+args = ["/absolute/path/to/clearance/examples/marker-classifier.mjs", "--progress"]
+# Child variable = parent variable name; no environment is implicitly inherited.
+env = {}
+# Deadline for processing the complete file; progress does not extend it.
+timeoutMs = 300000
+concurrency = 1
+maxFileBytes = 8388608
+maxInputBytes = 67108864
+maxOutputBytes = 1048576
+maxStderrBytes = 65536
+maxFindings = 4096
+maxFindingBytes = 65536
+maxResolutionBytes = 268435456
+
+[detectors.classifier.policy]
+instructions = "Report every EXAMPLE_PRIVATE_ marker followed by one or more uppercase ASCII letters or digits."
+[[detectors.classifier.policy.categories]]
+id = "confidential"
+reasons = ["private_marker"]
+severity = "high"
+inclusion = ["Literal EXAMPLE_PRIVATE_ markers."]
+exclusion = []
+examples = ["EXAMPLE_PRIVATE_DEMO"]
